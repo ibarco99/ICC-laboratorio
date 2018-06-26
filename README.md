@@ -82,10 +82,15 @@ def mensaje(emisor, receptor, mensaje):
     lista=[]
     lista.append(emisor)
     lista.append(receptor)
+    lista.append(dt)
     lista.append(mensaje)
-    lista.append(hours)
+    for i in lista_de_alumnos:
+        if i[4]==emisor:
+            lista[0]=i[0]+i[1]
+    for i in lista_de_alumnos:
+        if i[4]==receptor:
+            lista[1]=i[0]+i[1]
     print(lista)
-
     return lista
 
 
