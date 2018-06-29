@@ -20,7 +20,7 @@ def menu():
 
 
 def crear():
-    file = open('alumnos.txt', 'r')
+    file = open('alumnos.txt', 'r+')
     lineas = [linea.split(',') for linea in file]
     ID=1
     for i in lineas:
