@@ -43,7 +43,6 @@ def buscar(file, hola):
     for linea in file:
         if hola in linea:
             lista.append(linea)
-    print('Nombre,Apellido,edad,numedo,ID')
     print(' '.join(lista))
 
     return
@@ -55,7 +54,7 @@ def editar(hola):
         lineas = [linea.split(',') for linea in file]
     for i in lineas:
         if int(i[4]) == int(hola):
-            print(i)
+            print(','.join(i))
             lista = i
             lista1=i
             break
@@ -80,7 +79,7 @@ def eliminar(ID_Registro):
     file=open('alumnos.txt', 'r')
     lineas = [linea.split(',') for linea in file]
     for j in lineas:
-        if j[4] == ID_Registro + '\n':
+        if ID_Registro + '\n' in j:
             lineas.remove(j)
     file.close()
     file = open('alumnos.txt', 'w+')
@@ -124,11 +123,11 @@ def ver_historial():
         lineas1 = [linea.split(',') for linea in f]
     for alumnos in lineas1:
         for mensajes in lineas:
-            if mensajes[0] + '\n'==alumnos[4]:
+            if mensajes[0] + '\n' in alumnos:
                 mensajes[0]=alumnos[0]+' '+ alumnos[1]
     for mensajes1 in lineas:
         for alumnos1 in lineas1:
-            if mensajes1[1] +'\n'==alumnos1[4]:
+            if mensajes1[1]  + '\n' in alumnos1:
                 mensajes1[1]=alumnos1[0]+' '+alumnos1[1]
 
     for i in lineas:
