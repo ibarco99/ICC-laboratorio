@@ -20,11 +20,11 @@ def menu():
 
 
 def crear():
-    ID=0
-    with open('alumnos.rtf') as f:
-        for line in f:
-            words = line.split()
-            ID += 1
+    file = open('alumnos.txt', 'r')
+    lineas = [linea.split(',') for linea in file]
+    ID=1
+    for i in lineas:
+        ID=int(i[4])+1
     lista1 = []
     alumno = []
     datos = ["Nombre: ", "Apellido Paterno: ", "Edad: ", "Teléfono: "]
@@ -39,48 +39,56 @@ def crear():
 
 def buscar(file, hola):
     lista=[]
-    file = open('alumnos.rtf', 'r')
+    file = open('alumnos.txt', 'r')
     for linea in file:
         if hola in linea:
             lista.append(linea)
-
+    print('Nombre,Apellido,edad,numedo,ID')
     print(' '.join(lista))
 
     return
 
 
 
-def editar(file, hola):
-    with open('alumnos.rft', 'r+') as f:
-        lineas = [linea.split('') for linea in f]
-        print(lineas)
-    for linea in lineas:
-        if linea[4] == hola:
-            print(linea)
-            lista = linea
+def editar(hola):
+    with open('alumnos.txt', 'r') as file:
+        lineas = [linea.split(',') for linea in file]
+    for i in lineas:
+        if int(i[4]) == int(hola):
+            print(i)
+            lista = i
+            lista1=i
             break
-    num = int(input('Si desdea cambiar el Nombre, precione 1, si desea cambiar el Apellido, precione 2, si desea cambiar la edad, presione tres, de lo contrario preciones 4 para cambiar de Telefono: '))
+    file.close()
+    num = int(input('Si desdea cambiar el Nombre, precione 1, si desea cambiar el Apellido, precione 2, si desea cambiar la edad, presione 3, de lo contrario preciones 4 para cambiar de Telefono: '))
     ab = num - 1
     print(lista[ab])
-    lista[ab] = input('Ingrese el nuevo valor')
+    lista[ab] = input('Ingrese el nuevo valor: ')
     print(lista)
     for i in lineas:
-        if i== linea:
-            linea=lista
+        if i==lista1:
+            i=lista
+    file=open('alumnos.txt', 'w+')
+    for i in lineas:
+        file.write(','.join(i))
     file.close()
-    file=open('alumnos.rtf', 'w')
-    file.write(' '.join(lista) + '\n')
-
     return
 
 
 
-def eliminar(lista, ID_Registro):
-    with open('alumnos.rtf', 'r+') as f:
-        lineas = [linea.split() for linea in f]
-        for linea in lineas:
-            if ID_Registro in linea:
-                del linea
+def eliminar(ID_Registro):
+    file=open('alumnos.txt', 'r')
+    lineas = [linea.split(',') for linea in file]
+    for j in lineas:
+        if j[4] == ID_Registro + '\n':
+            lineas.remove(j)
+    file.close()
+    file = open('alumnos.txt', 'w+')
+    for i in lineas:
+        file.write(','.join(i))
+    file.close()
+
+
 
     return
 
@@ -104,38 +112,33 @@ def mensaje():
 
 def ver_historial():
 
-    #Agregar un algoritmo para mostrar el historial de los mensajes en orden cronológico con la siguient estructura:
-    # Nombres y apellido del emisor |  Nombres y apellido del receptor  |  Fecha y hora del mensaje  |  Contenido del Mensaje
-    # El historial debe mostrarse ordenado por Emisor , Receptor y Fecha y hora del mensaje
 
-    with open('mensajes.txt', 'r') as f:
+    with open('mensajes.txt', 'r+') as f:
         lineas = [linea.split(',') for linea in f]
-    print('Emisor, receptor, Fecha, Hora')
+    print('Emisor, receptor, Fecha, Hora, Mensaje')
     for i in lineas:
         lineas.sort(key=lambda linea:linea[3])
         for i in lineas:
             lineas.sort(key=lambda linea: linea[2])
-    with open('alumnos.rtf', 'r') as f:
-        lineas1 = [linea.split() for linea in f]
-    for mensajes in lineas:
-        for alumnos in lineas1:
-            if mensajes[0]==alumnos[4]:
+    with open('alumnos.txt', 'r+') as f:
+        lineas1 = [linea.split(',') for linea in f]
+    for alumnos in lineas1:
+        for mensajes in lineas:
+            if mensajes[0] + '\n'==alumnos[4]:
                 mensajes[0]=alumnos[0]+' '+ alumnos[1]
-    for mensajes in lineas:
-        for alumnos in lineas1:
-            if mensajes[1]==alumnos[4]:
-                mensajes[1]=alumnos[0]+' '+alumnos[1]
+    for mensajes1 in lineas:
+        for alumnos1 in lineas1:
+            if mensajes1[1] +'\n'==alumnos1[4]:
+                mensajes1[1]=alumnos1[0]+' '+alumnos1[1]
 
     for i in lineas:
-        del i[4]
         print(', '.join(i))
     f.close()
 
 
-
     return
 
-file= open('alumnos.rtf','r')
+file= open('alumnos.txt','r')
 
 
 opcion = 0
@@ -145,8 +148,8 @@ while not(opcion == 7):
 
     if opcion == 1:
         print("Seleccionó la opción Crear")
-        file1 = open('alumnos.rtf', 'a+')
-        file1.write(' '.join(crear())+ '\n')
+        file1 = open('alumnos.txt', 'a+')
+        file1.write(','.join(crear())+ '\n')
         file1.close()
 
     elif opcion == 2:
@@ -156,13 +159,13 @@ while not(opcion == 7):
 
     elif opcion == 3:
         print("Seleccionó la opción Editar")
-        codigo_de_alumno = input("Ingrese el ID de registro de alumno a MODIFICAR: ")
-        lista_de_alumnos = editar(file, codigo_de_alumno)
+        codigo_de_alumno = str(input("Ingrese el ID de registro de alumno a MODIFICAR: "))
+        lista_de_alumnos = editar( codigo_de_alumno)
 
     elif opcion == 4:
         print("Seleccionó la opción Eliminar")
-        codigo_de_alumno = int(input("Ingrese el ID de registro de alumnoa ELIMINAR: "))
-        lista_de_alumnos = eliminar(file, codigo_de_alumno)
+        codigo_de_alumno = input("Ingrese el ID de registro de alumno a ELIMINAR: ")
+        lista_de_alumnos = eliminar(codigo_de_alumno)
 
     elif opcion == 5:
         print("Seleccionó la opción Mensaje")
