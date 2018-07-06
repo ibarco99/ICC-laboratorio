@@ -137,7 +137,8 @@ def ver_historial():
 
     return
 
-file= open('alumnos.txt','r')
+file= open('alumnos.txt','w')
+file1= open('mensajes.txt','w')
 
 
 opcion = 0
@@ -179,3 +180,4 @@ while not(opcion == 7):
     elif opcion == 7:
         print("Finalizó el programa")
 file.close()
+file1.close()
